@@ -58,6 +58,17 @@ async def get_book(book_id: int) -> Book:
     return book
 
 
+#test end point
+@router.get("/test/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
+async def get_book(book_id: int) -> Book:
+    book = db.get_book(book_id)
+    if not book:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Book with ID {book_id} not found"
+        )
+    return book
+
+
 @router.put("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
 async def update_book(book_id: int, book: Book) -> Book:
     return JSONResponse(
