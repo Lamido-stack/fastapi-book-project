@@ -1,0 +1,32 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest flake8  # Ensure test and linting tools are installed
+
+      - name: Run Linter (flake8)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          
+      - name: Run Tests
+        run: |
+          pytest
